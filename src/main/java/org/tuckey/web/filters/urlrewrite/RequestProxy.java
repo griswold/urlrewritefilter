@@ -40,10 +40,12 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.ProxyHost;
 import org.apache.commons.httpclient.SimpleHttpConnectionManager;
+import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.EntityEnclosingMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.tuckey.web.filters.urlrewrite.utils.Log;
 import org.tuckey.web.filters.urlrewrite.utils.StringUtils;
@@ -181,11 +183,19 @@ public class RequestProxy {
     private static HttpMethod setupProxyRequest(final HttpServletRequest hsRequest, final URL targetUrl) throws IOException {
         final String methodName = hsRequest.getMethod();
         final HttpMethod method;
+
         if ("POST".equalsIgnoreCase(methodName)) {
             PostMethod postMethod = new PostMethod();
             InputStreamRequestEntity inputStreamRequestEntity = new InputStreamRequestEntity(hsRequest.getInputStream());
             postMethod.setRequestEntity(inputStreamRequestEntity);
             method = postMethod;
+        } else if ("PUT".equalsIgnoreCase(methodName)) {
+            PutMethod putMethod = new PutMethod();
+            InputStreamRequestEntity inputStreamRequestEntity = new InputStreamRequestEntity(hsRequest.getInputStream());
+            putMethod.setRequestEntity(inputStreamRequestEntity);
+            method = putMethod;
+        } else if ("DELETE".equalsIgnoreCase(methodName)) {
+            method = new DeleteMethod();
         } else if ("GET".equalsIgnoreCase(methodName)) {
             method = new GetMethod();
         } else {
