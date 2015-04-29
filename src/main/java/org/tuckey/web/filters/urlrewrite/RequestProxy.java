@@ -222,9 +222,6 @@ public class RequestProxy {
                     //The response stream should (afaik) be deflated. If our http client does not support
                     //gzip then the response can not be unzipped and is delivered wrong.
                     continue;
-                } else if (headerName.toLowerCase().startsWith("cookie")) {
-                    //fixme : don't set any cookies in the proxied request, this needs a cleaner solution
-                    continue;
                 }
 
                 Enumeration values = hsRequest.getHeaders(headerName);
